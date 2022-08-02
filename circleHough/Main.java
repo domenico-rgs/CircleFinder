@@ -20,7 +20,7 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 
 		/* Default Variables/Arguments */
-		final String path = "./result/";
+		final String path = "./results/";
 		int threshold = 150;
 		int minRadius = 10;
 		int maxRadius = 100;
