@@ -1,8 +1,6 @@
 package circleHough;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
@@ -10,14 +8,9 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 
 public class Utils {
+
 	/*
 	 * Changes the brightness of an image by the given factor
 	 */

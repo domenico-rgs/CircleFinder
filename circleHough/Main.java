@@ -32,18 +32,18 @@ public class Main {
 			System.out.println("Usage: Main imagePath [circles] [threshold] [minRadius] [maxRadius]");
 			System.exit(1);
 		}
-		
+
 		if (args.length > 2) {
 
 			try {
 				switch (args.length) {
-				case 4:
+				case 5:
 					maxRadius = Integer.parseInt(args[4]);
-				case 3:
+				case 4:
 					minRadius = Integer.parseInt(args[3]);
-				case 2:
+				case 3:
 					threshold = Integer.parseInt(args[2]);
-				case 1:
+				case 2:
 					numberOfCircles = Integer.parseInt(args[1]);
 				}
 			} catch (NumberFormatException e) {
@@ -65,7 +65,7 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-		
+
 		ArrayList<BufferedImage> images = new ArrayList<>();
 
 		/* Reads the original image */
@@ -110,7 +110,7 @@ public class Main {
 		CircleDetector circleDetector = new CircleDetector(threshold, numberOfCircles, minRadius, maxRadius);
 		List<Circle> detectedCircles = circleDetector.circleDetection(imgSobel, sobel);
 		Collections.sort(detectedCircles, Collections.reverseOrder());
-		
+
 		circlesImg.createGraphics().drawImage(images.get(0), 0, 0, null);
 		Graphics2D graph = circlesImg.createGraphics();
 		graph.setColor(Color.RED);
@@ -123,7 +123,7 @@ public class Main {
 
 		images.add(circlesImg);
 		Utils.writeImage(circlesImg, path + "detectedCircles.png");
-		
+
 		View gui = new View(images, path);
 		gui.setVisible(true);
 	}
