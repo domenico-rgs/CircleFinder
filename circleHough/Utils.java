@@ -18,29 +18,6 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 public class Utils {
-
-	/*
-	 * Displays an image given its path
-	 */
-	public static void displayImage(String imagePath, String title) throws IOException {
-		File file = new File(imagePath);
-		BufferedImage image = ImageIO.read(file);
-
-		JFrame f = new JFrame(title);
-		ImageIcon pic = new ImageIcon(imagePath);
-		JLabel label;
-		JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
-		panel.setBackground(Color.WHITE);
-		label = new JLabel("", pic, SwingConstants.CENTER);
-		panel.add(label);
-		f.setVisible(true);
-		f.setResizable(false);
-		f.add(panel);
-		f.pack();
-		f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	}
-
 	/*
 	 * Changes the brightness of an image by the given factor
 	 */

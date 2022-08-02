@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,7 +31,9 @@ public class Main {
 		if (args.length < 1 || args.length > 5) {
 			System.out.println("Usage: Main imagePath [circles] [threshold] [minRadius] [maxRadius]");
 			System.exit(1);
-		} else if (args.length > 2) {
+		}
+		
+		if (args.length > 2) {
 
 			try {
 				switch (args.length) {
@@ -62,20 +65,22 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+		
+		ArrayList<BufferedImage> images = new ArrayList<>();
 
 		/* Reads the original image */
 		File origin = new File(args[0]);
-		BufferedImage originalImage = null;
 
 		try {
-			originalImage = ImageIO.read(origin);
+			images.add(ImageIO.read(origin));
 		} catch (IOException e) {
 			System.out.println("Image not found");
 			System.exit(1);
 		}
 
 		/* Converts image into gray-scale */
-		BufferedImage gray = Utils.toGray(originalImage);
+		BufferedImage gray = Utils.toGray(images.get(0));
+		images.add(gray);
 		Utils.writeImage(gray, path + "gray.png");
 
 		/* Applies Gaussian Blur */
@@ -83,6 +88,7 @@ public class Main {
 		for (int i = 0; i < 2; i++) {
 			blurred = GaussianBlur.blur(blurred);
 		}
+		images.add(blurred);
 		Utils.writeImage(blurred, path + "blur.png");
 
 		/* Applies Sobel edge detection */
@@ -92,27 +98,33 @@ public class Main {
 		double[][] sobel = sob.getSobel();
 
 		BufferedImage imgSobel = sob.getSobelImage();
+		images.add(imgSobel);
 		BufferedImage imgSobelThreshold = sob.getAboveThresholdImage(threshold);
+		images.add(imgSobelThreshold);
 
 		Utils.writeImage(imgSobel, path + "sobel.png");
 		Utils.writeImage(imgSobelThreshold, path + "sobelThreshold.png");
 
 		/* Performs the circle detection */
-		BufferedImage imgCircles = new BufferedImage(gray.getWidth(), gray.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		CircleDetector circleFinder = new CircleDetector(threshold, numberOfCircles, minRadius, maxRadius);
-		List<Circle> detectedCircles = circleFinder.circleDetection(imgSobel, sobel);
+		BufferedImage circlesImg = new BufferedImage(gray.getWidth(), gray.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		CircleDetector circleDetector = new CircleDetector(threshold, numberOfCircles, minRadius, maxRadius);
+		List<Circle> detectedCircles = circleDetector.circleDetection(imgSobel, sobel);
 		Collections.sort(detectedCircles, Collections.reverseOrder());
-
-		imgCircles.getGraphics().drawImage(originalImage, 0, 0, null);
-		Graphics2D g = imgCircles.createGraphics();
-		g.setColor(Color.RED);
+		
+		circlesImg.createGraphics().drawImage(images.get(0), 0, 0, null);
+		Graphics2D graph = circlesImg.createGraphics();
+		graph.setColor(Color.RED);
 		for (int i = 0; i < numberOfCircles; i++) {
 			Circle circleToDraw = detectedCircles.get(i);
 			double x = circleToDraw.getX() - circleToDraw.getR() * Math.cos(0 * Math.PI / 180);
 			double y = circleToDraw.getY() - circleToDraw.getR() * Math.sin(90 * Math.PI / 180);
-			g.drawOval((int) x, (int) y, 2 * circleToDraw.getR(), 2 * circleToDraw.getR());
+			graph.drawOval((int) x, (int) y, 2 * circleToDraw.getR(), 2 * circleToDraw.getR());
 		}
 
-		Utils.writeImage(imgCircles, path + "detectedCircles.png");
+		images.add(circlesImg);
+		Utils.writeImage(circlesImg, path + "detectedCircles.png");
+		
+		View gui = new View(images, path);
+		gui.setVisible(true);
 	}
 }
