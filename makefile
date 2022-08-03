@@ -5,12 +5,9 @@ JC = javac
 	$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-	circleHough/Main.java \
-	circleHough/Utils.java \
-	circleHough/filters/GaussianBlur.java \
-	circleHough/filters/Sobel.java \
-	circleHough/houghTransform/Circle.java \
-	circleHough/houghTransform/CircleDetector.java 
+	circleHough/*.java \
+	circleHough/filters/*.java \
+	circleHough/houghTransform/*.java
         
 default: classes
 

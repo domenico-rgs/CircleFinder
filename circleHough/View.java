@@ -20,40 +20,6 @@ import javax.swing.WindowConstants;
 public class View extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private static void resize(ArrayList<BufferedImage> images, int maxW, int maxH) {
-		for (int counter = 0; counter < images.size(); counter++) {
-			BufferedImage img = images.get(counter);
-
-			if (img.getWidth() > img.getHeight()) {
-				if (img.getWidth() > maxW) {
-					Image tmp = img.getScaledInstance(maxW, img.getWidth() / img.getHeight() * maxW,
-							Image.SCALE_SMOOTH);
-					BufferedImage dimg = new BufferedImage(maxW, img.getWidth() / img.getHeight() * maxW,
-							BufferedImage.TYPE_INT_ARGB);
-
-					Graphics2D g2d = dimg.createGraphics();
-					g2d.drawImage(tmp, 0, 0, null);
-					g2d.dispose();
-
-					images.set(counter, dimg);
-				}
-			} else {
-				if (img.getHeight() > maxH) {
-					Image tmp = img.getScaledInstance(img.getHeight() / img.getWidth() * maxH, maxH,
-							Image.SCALE_SMOOTH);
-					BufferedImage dimg = new BufferedImage(img.getHeight() / img.getWidth() * maxH, maxH,
-							BufferedImage.TYPE_INT_ARGB);
-
-					Graphics2D g2d = dimg.createGraphics();
-					g2d.drawImage(tmp, 0, 0, null);
-					g2d.dispose();
-
-					images.set(counter, dimg);
-				}
-			}
-		}
-	}
-
 	public View(ArrayList<BufferedImage> images, String dir) {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(screenSize.width, screenSize.height);
@@ -97,5 +63,38 @@ public class View extends JFrame {
 
 		getContentPane().add(resImg, BorderLayout.NORTH);
 		getContentPane().add(interImages, BorderLayout.CENTER);
+	}
+
+	/*
+	 * Resize the images to be output to a max width of maxW or max height of maxH, the other dimensions is computed accordingly
+	 */
+	private static void resize(ArrayList<BufferedImage> images, int maxW, int maxH) {
+		for (int counter = 0; counter < images.size(); counter++) {
+			BufferedImage img = images.get(counter);
+
+			if (img.getWidth() > img.getHeight()) {
+				if (img.getWidth() > maxW) {
+					Image tmp = img.getScaledInstance(maxW, img.getWidth() / img.getHeight() * maxW, Image.SCALE_SMOOTH);
+					BufferedImage dimg = new BufferedImage(maxW, img.getWidth() / img.getHeight() * maxW, BufferedImage.TYPE_INT_ARGB);
+
+					Graphics2D g2d = dimg.createGraphics();
+					g2d.drawImage(tmp, 0, 0, null);
+					g2d.dispose();
+
+					images.set(counter, dimg);
+				}
+			} else {
+				if (img.getHeight() > maxH) {
+					Image tmp = img.getScaledInstance(img.getHeight() / img.getWidth() * maxH, maxH, Image.SCALE_SMOOTH);
+					BufferedImage dimg = new BufferedImage(img.getHeight() / img.getWidth() * maxH, maxH, BufferedImage.TYPE_INT_ARGB);
+
+					Graphics2D g2d = dimg.createGraphics();
+					g2d.drawImage(tmp, 0, 0, null);
+					g2d.dispose();
+
+					images.set(counter, dimg);
+				}
+			}
+		}
 	}
 }

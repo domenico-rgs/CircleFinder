@@ -10,23 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Utils {
-
-	/*
-	 * Changes the brightness of an image by the given factor
-	 */
-	public static BufferedImage editBrightness(float brightenFactor, BufferedImage image) {
-		RescaleOp rOp = new RescaleOp(brightenFactor, 0, null);
-		image = rOp.filter(image, image);
-		return image;
-	}
-
-	/*
-	 * Maps the value between start1 and end1 to a value between start2 and end2
-	 */
-	public static double map(double value, double start1, double end1, double start2, double end2) {
-		double ratio = (end2 - start2) / (end1 - start1);
-		return ratio * (value - start1) + start2;
-	}
+	private Utils() {}
 
 	/*
 	 * Converts a given image into a gray-scale image
@@ -51,6 +35,12 @@ public class Utils {
 		ImageIO.write(image, "png", output);
 	}
 
-	private Utils() {
+	/*
+	 * Rescale pixel-by-pixel the data of a factor equal to scaleFact
+	 */
+	public static BufferedImage rescaleData(float scaleFact, BufferedImage image) {
+		RescaleOp rOp = new RescaleOp(scaleFact, 0, null);
+		image = rOp.filter(image, image);
+		return image;
 	}
 }

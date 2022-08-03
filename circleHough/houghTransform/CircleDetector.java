@@ -7,25 +7,23 @@ import java.util.List;
 public class CircleDetector {
 
 	private int threshold;
-	private int numberOfCircles;
 	private int minRadius;
 	private int maxRadius;
 
-	public CircleDetector(int threshold, int numberOfCircles, int minRadius, int maxRadius) {
-		this.numberOfCircles = numberOfCircles;
+	public CircleDetector(int threshold, int minRadius, int maxRadius) {
 		this.threshold = threshold;
 		this.minRadius = minRadius;
 		this.maxRadius = maxRadius;
 	}
 
 	/*
-	 * Detect circles on the given image
+	 * Detect circles on a given image starting from sobel results
 	 */
 	public List<Circle> circleDetection(BufferedImage image, double[][] sobel) throws Exception {
-		// sets a 3D integer space array to contain 'hits' circles
-		int[][][] accumulator = new int[image.getWidth()][image.getHeight()][maxRadius];
-		int max = 0;
+		List<Circle> circles = new ArrayList<>();
+		int[][][] accumulator = new int[image.getWidth()][image.getHeight()][maxRadius]; //3D integer space array to contain 'hits' circles
 
+		int max = 0;
 		for (int x = 0; x < image.getWidth(); x++) {
 			for (int y = 0; y < image.getHeight(); y++) {
 				/*
@@ -51,7 +49,6 @@ public class CircleDetector {
 			}
 		}
 
-		List<Circle> circles = new ArrayList<>();
 		for (int x = 0; x < image.getWidth(); x++) {
 			for (int y = 0; y < image.getHeight(); y++) {
 				for (int rad = minRadius; rad < maxRadius; rad++) {
@@ -59,11 +56,18 @@ public class CircleDetector {
 				}
 			}
 		}
-
 		return circles;
 	}
 
-	public int getNumberOfCircles() {
-		return numberOfCircles;
+	public int getThreshold() {
+		return threshold;
+	}
+
+	public int getMinRadius() {
+		return minRadius;
+	}
+
+	public int getMaxRadius() {
+		return maxRadius;
 	}
 }
