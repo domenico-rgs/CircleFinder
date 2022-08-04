@@ -29,7 +29,7 @@ public class Main {
 
 		/* Checks argument and result folder */
 		if (args.length < 1 || args.length > 5) {
-			System.out.println("Usage: Main imagePath [sobelThreshold] [minRadius] [maxRadius] [circlesThreshold]");
+			System.out.println("Usage: Main imagePath [sobelThreshold] [minRadius] [maxRadius] [circleThreshold]");
 			System.exit(1);
 		}
 
@@ -38,13 +38,21 @@ public class Main {
 			try {
 				switch (args.length) {
 				case 5:
-					circleThreshold = Integer.parseInt(args[4]);
+					if(Integer.parseInt(args[4])>1) {
+						circleThreshold = Integer.parseInt(args[4]);
+					}else {
+						System.out.println("Negative circleThreshold input, keeping default value (1)");
+					}
 				case 4:
 					maxRadius = Integer.parseInt(args[3]);
 				case 3:
 					minRadius = Integer.parseInt(args[2]);
 				case 2:
-					sobelThreshold = Integer.parseInt(args[1]);
+					if(Integer.parseInt(args[1]) > 0 && Integer.parseInt(args[1]) < 255) {
+						sobelThreshold = Integer.parseInt(args[1]);
+					}else {
+						System.out.println("sobelThreshold out of range, keeping default value (150)");
+					}
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("Specified arguments must be integers");
@@ -115,6 +123,7 @@ public class Main {
 
 		if(circleThreshold > detectedCircles.size()) {
 			circleThreshold = detectedCircles.size();
+			System.out.println("circleThreshold is too high, printing all the circles in the accumulator...");
 		}
 
 		for (int i = 0; i < circleThreshold; i++) {
